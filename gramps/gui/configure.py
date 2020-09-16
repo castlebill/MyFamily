@@ -67,6 +67,7 @@ from .widgets import MarkupLabel, BasicLabel
 from .dialog import ErrorDialog, OkDialog
 from .editors.editplaceformat import EditPlaceFormat
 from .display import display_help
+from .glade import Glade
 from gramps.gen.plug.utils import available_updates
 from .plug import PluginWindows
 #from gramps.gen.errors import WindowActiveError
@@ -571,11 +572,15 @@ class GrampsPreferences(ConfigureDialog):
             )
         ConfigureDialog.__init__(self, uistate, dbstate, page_funcs,
                                  GrampsPreferences, config,
-                                 on_close=update_constants)
+                                 on_close=self._close)
+        self.panel.set_current_page(0)
         help_btn = self.window.add_button(_('_Help'), Gtk.ResponseType.HELP)
         help_btn.connect(
             'clicked', lambda x: display_help(WIKI_HELP_PAGE, WIKI_HELP_SEC))
         self.setup_configs('interface.grampspreferences', 700, 450)
+
+    def _close(self):
+        update_constants()                  # save the age constants
 
     def create_grid(self):
         """
@@ -1424,11 +1429,15 @@ class GrampsPreferences(ConfigureDialog):
         """
         Called to rebuild the place format list.
         """
+        active = self.pformat.get_active()
         model = Gtk.ListStore(str)
         for fmt in _pd.get_formats():
             model.append([fmt.name])
         self.pformat.set_model(model)
-        self.pformat.set_active(0)
+        if active != -1 and active < len(model):
+            self.pformat.set_active(active)
+        else:
+            self.pformat.set_active(0)
 
     def check_for_type_changed(self, obj):
         active = obj.get_active()

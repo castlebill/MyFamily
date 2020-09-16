@@ -49,11 +49,11 @@ import logging
 # Gramps module
 #------------------------------------------------
 from gramps.gen.const import GRAMPS_LOCALE as glocale
-from gramps.gen.lib import (PlaceType, Place, PlaceName)
+from gramps.gen.lib import (PlaceGroupType as P_G, Place, PlaceName)
 from gramps.gen.plug.report import Bibliography
 from gramps.plugins.lib.libhtml import Html
 from gramps.gen.utils.place import conv_lat_lon
-from gramps.gen.utils.location import get_main_location
+from gramps.gen.utils.location import get_location_list
 from gramps.gen.display.place import displayer as _pd
 
 #------------------------------------------------
@@ -214,7 +214,19 @@ class PlacePages(BasePage):
                         if place.get_change_time() > ldatec:
                             ldatec = place.get_change_time()
                         plc_title = pname
-                        main_location = get_main_location(self.r_db, place)
+                        loc_list = get_location_list(self.r_db, place)
+                        state = country = ''
+                        for loc in loc_list:
+                            # loc_list shoud be in order from small to largest
+                            name, place_type, dummy_hndl, _abbrs, group = loc
+                            if group == P_G.COUNTRY and not country:
+                                # should find smaller of country group
+                                country = name
+                                continue
+                            elif group == P_G.REGION:
+                                # should find largest (state)
+                                state = name
+                                continue
 
                         if plc_title and plc_title != " ":
                             letter = get_index_letter(first_letter(plc_title),
@@ -250,10 +262,8 @@ class PlacePages(BasePage):
                             Html("td", data or "&nbsp;", class_=colclass,
                                  inline=True)
                             for (colclass, data) in [
-                                ["ColumnState",
-                                 main_location.get(PlaceType.STATE, '')],
-                                ["ColumnCountry",
-                                 main_location.get(PlaceType.COUNTRY, '')]
+                                ["ColumnState", state],
+                                ["ColumnCountry", country]
                             ]
                         )
 

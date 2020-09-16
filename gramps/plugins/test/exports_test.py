@@ -26,14 +26,14 @@ from unittest.mock import patch
 from time import localtime, strptime
 
 from gramps.test.test_util import Gramps
-from gramps.gen.const import TEMP_DIR, DATA_DIR
+from gramps.gen.const import TEMP_DIR, DATA_DIR, HOME_DIR
 from gramps.gen.datehandler import set_format
 from gramps.gen.user import User
 from gramps.gen.utils.config import config
 
 TREE_NAME = "Test_exporttest"
 TEST_DIR = os.path.abspath(os.path.join(DATA_DIR, "tests"))
-
+DB_DIR = os.path.join(HOME_DIR, 'grampsdb')
 
 def mock_localtime(*args):
     """
@@ -204,7 +204,10 @@ class ExportControl(unittest.TestCase):
 #                            "--import", example)
 
     def tearDown(self):
-        call("-y", "-q", "--remove", TREE_NAME)
+        dbdir = os.path.join(DB_DIR, TREE_NAME)
+        if os.path.exists(dbdir):
+            os.rmdir(dbdir)
+#        call("-y", "-q", "--remove", TREE_NAME)
 
     def test_csv(self):
         """ Run a csv export test """

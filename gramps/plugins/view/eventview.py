@@ -412,13 +412,18 @@ class EventView(ListView):
         """
         Delete the event from the database.
         """
-        person_list = [item[1] for item in
+        person_list = [
+            item[1] for item in
             self.dbstate.db.find_backlink_handles(event.handle, ['Person'])]
-        family_list = [item[1] for item in
+        family_list = [
+            item[1] for item in
             self.dbstate.db.find_backlink_handles(event.handle, ['Family'])]
+        place_list = [
+            item[1] for item in
+            self.dbstate.db.find_backlink_handles(event.handle, ['Place'])]
 
         query = DeleteEventQuery(self.dbstate, self.uistate, event,
-                                 person_list, family_list)
+                                 person_list, family_list, place_list)
         query.query_response()
 
     def delete_multi_event_response(self, handles=None):
@@ -453,6 +458,14 @@ class EventView(ListView):
                     family = _db.get_family_from_handle(hndl)
                     family.remove_handle_references('Event', ev_handle_list)
                     _db.commit_family(family, trans)
+
+                place_list = [
+                    item[1] for item in
+                    _db.find_backlink_handles(handle, ['Place'])]
+                for hndl in place_list:
+                    place = _db.get_place_from_handle(hndl)
+                    place.remove_handle_references('Event', ev_handle_list)
+                    _db.commit_place(place, trans)
 
                 _db.remove_event(handle, trans)
                 self.uistate.pulse_progressbar(indx / hndl_cnt)

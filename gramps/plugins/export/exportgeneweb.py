@@ -273,7 +273,7 @@ class GeneWebWriter:
                 b_date = self.format_date( birth.get_date_object())
                 place_handle = birth.get_place_handle()
                 if place_handle:
-                    b_place = _pd.display_event(self.db, birth)
+                    b_place = _pd.display_event(self.db, birth, fmt=0)
 
         if probably_alive(person,self.db):
             d_date = ""
@@ -287,7 +287,7 @@ class GeneWebWriter:
                 d_date = self.format_date( death.get_date_object())
                 place_handle = death.get_place_handle()
                 if place_handle:
-                    d_place = _pd.display_event(self.db, death)
+                    d_place = _pd.display_event(self.db, death, fmt=0)
 
         retval = retval + "%s " % b_date
         if b_place != "":
@@ -373,14 +373,14 @@ class GeneWebWriter:
                 m_date = self.format_date( event.get_date_object())
                 place_handle = event.get_place_handle()
                 if place_handle:
-                    m_place = _pd.display_event(self.db, event)
+                    m_place = _pd.display_event(self.db, event, fmt=0)
                 m_source = self.get_primary_source( event.get_citation_list())
             if event.get_type() == EventType.ENGAGEMENT:
                 engaged = 1
                 eng_date = self.format_date( event.get_date_object())
                 place_handle = event.get_place_handle()
                 if place_handle:
-                    eng_place = _pd.display_event(self.db, event)
+                    eng_place = _pd.display_event(self.db, event, fmt=0)
                 eng_source = self.get_primary_source( event.get_citation_list())
             if event.get_type() == EventType.DIVORCE:
                 divorced = 1

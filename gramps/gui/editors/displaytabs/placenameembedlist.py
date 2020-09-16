@@ -3,6 +3,7 @@
 #
 # Copyright (C) 2000-2006  Donald N. Allingham
 # Copyright (C) 2015       Nick Hall
+# Copyright (C) 2019       Paul Culley
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -46,7 +47,7 @@ from .embeddedlist import EmbeddedList, TEXT_COL, MARKUP_COL, ICON_COL
 #-------------------------------------------------------------------------
 class PlaceNameEmbedList(EmbeddedList):
 
-    _HANDLE_COL = 3
+    _HANDLE_COL = 4
     _DND_TYPE = DdTargets.PLACENAME
 
     _MSG = {
@@ -63,19 +64,21 @@ class PlaceNameEmbedList(EmbeddedList):
         (_('Name'), 0, 250, TEXT_COL, -1, None),
         (_('Date'), 1, 250, TEXT_COL, -1, None),
         (_('Language'), 2, 100, TEXT_COL, -1, None),
+        (_('Abbreviations'), 3, 100, TEXT_COL, -1, None),
         ]
 
-    def __init__(self, dbstate, uistate, track, data):
+    def __init__(self, dbstate, uistate, track, data, update):
         self.data = data
+        self.update = update
         EmbeddedList.__init__(self, dbstate, uistate, track,
-                              _('Alternative Names'), PlaceNameModel,
+                              _('Names'), PlaceNameModel,
                               move_buttons=True)
 
     def get_data(self):
         return self.data
 
     def column_order(self):
-        return ((1, 0), (1, 1), (1, 2))
+        return ((1, 0), (1, 1), (1, 2), (1, 3))
 
     def add_button_clicked(self, obj):
         """
@@ -116,3 +119,6 @@ class PlaceNameEmbedList(EmbeddedList):
         Called to update the screen when the place name changes.
         """
         self.rebuild()
+
+    def post_rebuild(self, prebuildpath):
+        self.update()

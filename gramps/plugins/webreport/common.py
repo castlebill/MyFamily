@@ -924,12 +924,13 @@ def name_to_md5(text):
 
     return md5(text.encode('utf-8')).hexdigest()
 
-def get_gendex_data(database, event_ref):
+def get_gendex_data(database, event_ref, p_fmt=-1):
     """
     Given an event, return the date and place a strings
 
     @param: database  -- The database
     @param: event_ref -- The event reference
+    @param: p_fmt -- The place format to use for gendex file
     """
     doe = "" # date of event
     poe = "" # place of event
@@ -943,7 +944,7 @@ def get_gendex_data(database, event_ref):
                 if place_handle:
                     place = database.get_place_from_handle(place_handle)
                     if place:
-                        poe = _pd.display(database, place, date)
+                        poe = _pd.display(database, place, date, fmt=p_fmt)
     return doe, poe
 
 def format_date(date):

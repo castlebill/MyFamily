@@ -173,6 +173,9 @@ class NavWebReport(Report):
         # name format options
         self.name_format = self.options['name_format']
 
+        # place format options
+        self.place_format = self.options['place_format']
+
         # include families or not?
         self.inc_families = self.options['inc_families']
 
@@ -880,8 +883,10 @@ class NavWebReport(Report):
             else:
                 name = ""
         if config.get('preferences.place-auto'):
-            place_name = _pd.display_event(self._db, event)
-            pplace_name = _pd.display(self._db, place)
+            place_name = _pd.display_event(self._db, event,
+                                           fmt=self.place_format)
+            pplace_name = _pd.display(self._db, place,
+                                      fmt=self.place_format)
         else:
             place_name = place.get_title()
             pplace_name = place_name
@@ -1184,10 +1189,12 @@ class NavWebReport(Report):
         fullname = person.get_primary_name().get_gedcom_name()
 
         # get birth info:
-        dob, pob = get_gendex_data(self._db, person.get_birth_ref())
+        dob, pob = get_gendex_data(self._db, person.get_birth_ref(),
+                                   p_fmt=self.place_format)
 
         # get death info:
-        dod, pod = get_gendex_data(self._db, person.get_death_ref())
+        dod, pod = get_gendex_data(self._db, person.get_death_ref(),
+                                   p_fmt=self.place_format)
         linew = '|'.join((url, surname, fullname, dob, pob, dod, pod)) + '|\n'
         if self.archive:
             filep.write(bytes(linew, "utf8"))
@@ -1853,7 +1860,7 @@ class NavWebOptions(MenuReportOptions):
 
 
         stdoptions.add_name_format_option(menu, category_name)
-
+        stdoptions.add_place_format_option(menu, category_name)
         locale_opt = stdoptions.add_localization_option(menu, category_name)
         stdoptions.add_date_format_option(menu, category_name, locale_opt)
 

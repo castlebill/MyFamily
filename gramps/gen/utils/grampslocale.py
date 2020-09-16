@@ -45,11 +45,11 @@ _hdlr = None
 # logging.WARN. Uncomment the following to change it to logging.DEBUG:
 # LOG.setLevel(logging.DEBUG)
 try:
-    from icu import Locale, Collator
+    from icu import Locale, Collator, ICUError
     HAVE_ICU = True
 except ImportError:
     try:
-        from PyICU import Locale, Collator
+        from PyICU import Locale, Collator, ICUError
         HAVE_ICU = True
     except ImportError as err:
         # No logger, save the warning message for later.

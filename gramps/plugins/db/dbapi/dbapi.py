@@ -252,9 +252,6 @@ class DBAPI(DbGeneric):
                   TXNUPD: "-update",
                   TXNDEL: "-delete",
                   None: "-delete"}
-        if txn.batch:
-            # FIXME: need a User GUI update callback here:
-            self.reindex_reference_map(lambda percent: percent)
         self.dbapi.commit()
         if not txn.batch:
             # Now, emit signals:
@@ -620,8 +617,8 @@ class DBAPI(DbGeneric):
                                [obj.handle,
                                 pickle.dumps(obj.serialize())])
         self._update_secondary_values(obj)
+        self._update_backlinks(obj, trans)
         if not trans.batch:
-            self._update_backlinks(obj, trans)
             if old_data:
                 trans.add(obj_key, TXNUPD, obj.handle,
                           old_data,

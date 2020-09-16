@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.2 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
   <requires lib="grampswidgets" version="0.0"/>
   <object class="GtkDialog" id="editplace">
     <property name="can_focus">False</property>
     <property name="type_hint">dialog</property>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox19">
         <property name="visible">True</property>
@@ -87,7 +90,7 @@
                   <object class="GtkLabel" id="place_title_label">
                     <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
-                    <property name="halign">start</property>
+                    <property name="halign">end</property>
                     <property name="label" translatable="yes">_Title:</property>
                     <property name="use_underline">True</property>
                     <property name="justify">center</property>
@@ -95,31 +98,17 @@
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
+                    <property name="top_attach">0</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="comment1">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="halign">start</property>
-                    <property name="label" translatable="yes">Either use the two fields below to enter coordinates (latitude and longitude),</property>
-                    <property name="hexpand">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">3</property>
-                    <property name="width">5</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label249">
+                  <object class="GtkLabel" id="lat_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">center</property>
+                    <property name="halign">end</property>
                     <property name="label" translatable="yes">L_atitude:</property>
                     <property name="use_underline">True</property>
-                    <property name="justify">center</property>
+                    <property name="justify">right</property>
                     <property name="mnemonic_widget">lat_entry</property>
                   </object>
                   <packing>
@@ -128,17 +117,16 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="label250">
+                  <object class="GtkLabel" id="lon_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="label" translatable="yes">_Longitude:</property>
                     <property name="use_underline">True</property>
                     <property name="justify">center</property>
-                    <property name="mnemonic_widget">lon_entry</property>
                   </object>
                   <packing>
-                    <property name="left_attach">2</property>
+                    <property name="left_attach">4</property>
                     <property name="top_attach">4</property>
                   </packing>
                 </child>
@@ -152,18 +140,17 @@
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
-                    <property name="top_attach">1</property>
-                    <property name="width">4</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">5</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="label655">
+                  <object class="GtkLabel" id="id_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">start</property>
+                    <property name="halign">end</property>
                     <property name="label" translatable="yes">_ID:</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">gid</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -183,27 +170,14 @@ You can set these values via the Geography View by searching the place, or via a
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">4</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="ValidatableMaskedEntry" id="lon_entry">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="tooltip_text" translatable="yes">Longitude (position relative to the Prime, or Greenwich, Meridian) of the place in decimal or degree notation. 
-Eg, valid values are -124.3647, 124°52′21.92″E, E124°52′21.92″ or 124:52:21.92
-You can set these values via the Geography View by searching the place, or via a map service in the place view.</property>
-                    <property name="hexpand">True</property>
-                    <property name="invisible_char">●</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">3</property>
-                    <property name="top_attach">4</property>
+                    <property name="width">3</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkBox" id="copypaste">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="halign">start</property>
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkLabel" id="comment2">
@@ -221,9 +195,9 @@ You can set these values via the Geography View by searching the place, or via a
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
+                    <property name="left_attach">1</property>
                     <property name="top_attach">5</property>
-                    <property name="width">4</property>
+                    <property name="width">5</property>
                   </packing>
                 </child>
                 <child>
@@ -247,63 +221,9 @@ You can set these values via the Geography View by searching the place, or via a
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">6</property>
-                    <property name="width">4</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkBox" id="box1">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="spacing">6</property>
-                    <child>
-                      <object class="UndoableEntry" id="gid">
-                        <property name="width_request">75</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="tooltip_text" translatable="yes">A unique ID to identify the place</property>
-                        <property name="invisible_char">●</property>
-                        <property name="width_chars">6</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="label5">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">Code:</property>
-                        <property name="use_underline">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="UndoableEntry" id="code_entry">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="tooltip_text" translatable="yes">Code associated with this place. Eg Country Code or Postal Code.</property>
-                        <property name="invisible_char">●</property>
-                        <property name="width_chars">8</property>
-                      </object>
-                      <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
-                        <property name="position">2</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
                     <property name="left_attach">1</property>
-                    <property name="top_attach">7</property>
+                    <property name="top_attach">6</property>
+                    <property name="width">5</property>
                   </packing>
                 </child>
                 <child>
@@ -311,6 +231,7 @@ You can set these values via the Geography View by searching the place, or via a
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <property name="halign">end</property>
                     <property name="relief">none</property>
                     <child>
                       <object class="GtkImage" id="image">
@@ -332,8 +253,8 @@ You can set these values via the Geography View by searching the place, or via a
                     <accelerator key="p" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                   </object>
                   <packing>
-                    <property name="left_attach">4</property>
-                    <property name="top_attach">2</property>
+                    <property name="left_attach">6</property>
+                    <property name="top_attach">0</property>
                   </packing>
                 </child>
                 <child>
@@ -341,9 +262,10 @@ You can set these values via the Geography View by searching the place, or via a
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <property name="halign">end</property>
                   </object>
                   <packing>
-                    <property name="left_attach">4</property>
+                    <property name="left_attach">6</property>
                     <property name="top_attach">7</property>
                   </packing>
                 </child>
@@ -351,23 +273,23 @@ You can set these values via the Geography View by searching the place, or via a
                   <object class="GtkLabel" id="place_name_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">start</property>
+                    <property name="halign">end</property>
                     <property name="label" translatable="yes">place|Name:</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">2</property>
+                    <property name="top_attach">1</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="label4">
+                  <object class="GtkLabel" id="type_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">start</property>
+                    <property name="halign">end</property>
                     <property name="label" translatable="yes">Type:</property>
                   </object>
                   <packing>
-                    <property name="left_attach">2</property>
+                    <property name="left_attach">0</property>
                     <property name="top_attach">2</property>
                   </packing>
                 </child>
@@ -380,38 +302,16 @@ You can set these values via the Geography View by searching the place, or via a
                     <child internal-child="entry">
                       <object class="GtkEntry" id="combobox-entry2">
                         <property name="can_focus">True</property>
+                        <property name="tooltip_text" translatable="yes">The type of this place .</property>
                         <property name="hexpand">True</property>
                         <property name="overwrite_mode">True</property>
                       </object>
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">3</property>
+                    <property name="left_attach">1</property>
                     <property name="top_attach">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label2">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="label" translatable="yes">Tags:</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">7</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="tag_label">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="hexpand">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">3</property>
-                    <property name="top_attach">7</property>
+                    <property name="width">2</property>
                   </packing>
                 </child>
                 <child>
@@ -431,14 +331,102 @@ You can set these values via the Geography View by searching the place, or via a
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkBox" id="box2">
+                  <object class="GtkButton" id="type_button">
+                    <property name="width_request">37</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="tooltip_text" translatable="yes">Invoke place type editor.</property>
+                    <property name="halign">start</property>
+                    <child>
+                      <object class="GtkImage" id="image2">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="icon_name">gtk-edit</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">3</property>
+                    <property name="top_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="name_button">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="tooltip_text" translatable="yes">Invoke place name editor.</property>
+                    <property name="halign">end</property>
+                    <child>
+                      <object class="GtkImage" id="image1">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="icon_name">gtk-edit</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">6</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="UndoableEntry" id="name_entry">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="tooltip_text" translatable="yes">The name of this place.</property>
+                    <property name="hexpand">True</property>
+                    <property name="invisible_char">●</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">1</property>
+                    <property name="width">5</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBox" id="place_group">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes">What type of place this is. Eg 'Country', 'City', ... .</property>
+                    <property name="has_entry">True</property>
+                    <child internal-child="entry">
+                      <object class="GtkEntry">
+                        <property name="can_focus">True</property>
+                        <property name="tooltip_text" translatable="yes">The type of this place .</property>
+                        <property name="overwrite_mode">True</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">5</property>
+                    <property name="top_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="group_label">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">Category:</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">4</property>
+                    <property name="top_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="UndoableEntry" id="name_entry">
+                      <object class="ValidatableMaskedEntry" id="lon_entry">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="tooltip_text" translatable="yes">The name of this place.</property>
+                        <property name="tooltip_text" translatable="yes">Longitude (position relative to the Prime, or Greenwich, Meridian) of the place in decimal or degree notation. 
+Eg, valid values are -124.3647, 124°52′21.92″E, E124°52′21.92″ or 124:52:21.92
+You can set these values via the Geography View by searching the place, or via a map service in the place view.</property>
                         <property name="hexpand">True</property>
                         <property name="invisible_char">●</property>
                       </object>
@@ -448,19 +436,114 @@ You can set these values via the Geography View by searching the place, or via a
                         <property name="position">0</property>
                       </packing>
                     </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">5</property>
+                    <property name="top_attach">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
                     <child>
-                      <object class="GtkButton" id="name_button">
+                      <object class="GtkLabel" id="LatLonLabel">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes">Invoke place name editor.</property>
-                        <child>
-                          <object class="GtkImage" id="image1">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="icon_name">gtk-edit</property>
-                          </object>
-                        </child>
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes">Either use the two fields below to enter coordinates (latitude and longitude),</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">3</property>
+                    <property name="width">6</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="id_label1">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">gid</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">6</property>
+                    <property name="top_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="id_label2">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">gid</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">6</property>
+                    <property name="top_attach">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="id_label3">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">gid</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">6</property>
+                    <property name="top_attach">6</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="id_label4">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">gid</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">6</property>
+                    <property name="top_attach">5</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="Tag_box">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="spacing">6</property>
+                    <child>
+                      <object class="UndoableEntry" id="gid">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="tooltip_text" translatable="yes">A unique ID to identify the place</property>
+                        <property name="invisible_char">●</property>
+                        <property name="width_chars">18</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="tags_label">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes">Tags:</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -468,11 +551,31 @@ You can set these values via the Geography View by searching the place, or via a
                         <property name="position">1</property>
                       </packing>
                     </child>
+                    <child>
+                      <object class="GtkLabel" id="tag_label">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="halign">start</property>
+                        <property name="hexpand">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
-                    <property name="top_attach">2</property>
+                    <property name="top_attach">7</property>
+                    <property name="width">5</property>
                   </packing>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
                 </child>
                 <child>
                   <placeholder/>
@@ -488,6 +591,8 @@ You can set these values via the Geography View by searching the place, or via a
               <object class="GtkNotebook" id="notebook3">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="scrollable">True</property>
+                <property name="enable_popup">True</property>
                 <child>
                   <placeholder/>
                 </child>

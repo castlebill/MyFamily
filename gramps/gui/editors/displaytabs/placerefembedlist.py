@@ -50,7 +50,7 @@ from ...dbguielement import DbGUIElement
 #-------------------------------------------------------------------------
 class PlaceRefEmbedList(DbGUIElement, EmbeddedList):
 
-    _HANDLE_COL = 4
+    _HANDLE_COL = 5
     _DND_TYPE = DdTargets.PLACEREF
     _DND_EXTRA = DdTargets.PLACE_LINK
 
@@ -61,6 +61,7 @@ class PlaceRefEmbedList(DbGUIElement, EmbeddedList):
         (_('Name'), 1, 250, TEXT_COL, -1, None),
         (_('Type'), 2, 100, TEXT_COL, -1, None),
         (_('Date'), 3, 150, TEXT_COL, -1, None),
+        (_('Hierarchy'), 4, 80, TEXT_COL, -1, None),
         ]
 
     def __init__(self, dbstate, uistate, track, data, handle, callback):
@@ -121,7 +122,7 @@ class PlaceRefEmbedList(DbGUIElement, EmbeddedList):
         return self.data
 
     def column_order(self):
-        return ((1, 0), (1, 1), (1, 2), (1, 3))
+        return ((1, 0), (1, 1), (1, 2), (1, 3), (1, 4))
 
     def get_skip_list(self, handle):
         todo = [handle]

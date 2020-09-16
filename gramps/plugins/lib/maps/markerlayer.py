@@ -157,7 +157,7 @@ class MarkerLayer(GObject.GObject, osmgpsmap.MapLayer):
             else:
                 # We use colored icons.
                 draw_marker(ctx, float(coord_x), float(coord_y),
-                            size, marker[3][1])
+                            size, marker[3])
         _LOG.debug("%s", time.strftime("end drawing     : "
                    "%a %d %b %Y %H:%M:%S", time.gmtime()))
 

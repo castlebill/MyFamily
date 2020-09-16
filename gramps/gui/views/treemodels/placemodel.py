@@ -44,7 +44,7 @@ from gi.repository import Gtk
 # Gramps modules
 #
 #-------------------------------------------------------------------------
-from gramps.gen.lib import Place, PlaceType
+from gramps.gen.lib import Place, PlaceType, PlaceGroupType
 from gramps.gen.datehandler import format_time
 from gramps.gen.utils.place import conv_lat_lon
 from gramps.gen.display.place import displayer as place_displayer
@@ -75,12 +75,12 @@ class PlaceBaseModel:
             self.column_id,
             self.column_title,
             self.column_type,
-            self.column_code,
             self.column_latitude,
             self.column_longitude,
             self.column_private,
             self.column_tags,
             self.column_change,
+            self.column_group,
             self.column_tag_color,
             self.search_name,
             ]
@@ -89,12 +89,12 @@ class PlaceBaseModel:
             self.column_id,
             self.column_title,
             self.column_type,
-            self.column_code,
             self.sort_latitude,
             self.sort_longitude,
             self.column_private,
             self.column_tags,
             self.sort_change,
+            self.column_group,
             self.column_tag_color,
             self.search_name,
             ]
@@ -130,12 +130,12 @@ class PlaceBaseModel:
 
     def column_name(self, data):
         """ Return the primary name """
-        return data[6][0]
+        return data[6][0][0]
 
     def search_name(self, data):
-        """ The search name includes all alt names to enable finding by alt name
+        """ The search name includes all names to enable finding
         """
-        return ','.join([data[6][0]] + [name[0] for name in data[7]])
+        return ','.join([name[0] for name in data[6]])
 
     def column_longitude(self, data):
         if not data[3]:
@@ -173,23 +173,23 @@ class PlaceBaseModel:
         return data[1]
 
     def column_type(self, data):
-        return str(PlaceType(data[8]))
-
-    def column_code(self, data):
-        return data[9]
+        ptdata = data[7][0]
+        return str(PlaceType((ptdata[0], ptdata[1])))
 
     def column_private(self, data):
-        if data[17]:
+        if data[16]:
             return 'gramps-lock'
-        else:
-            # There is a problem returning None here.
-            return ''
+        # There is a problem returning None here.
+        return ''
 
     def sort_change(self, data):
-        return "%012x" % data[15]
+        return "%012x" % data[14]
+
+    def column_group(self, data):
+        return str(PlaceGroupType(data[17]))
 
     def column_change(self, data):
-        return format_time(data[15])
+        return format_time(data[14])
 
     def get_tag_name(self, tag_handle):
         """
@@ -210,7 +210,7 @@ class PlaceBaseModel:
         if not cached:
             tag_color = ""
             tag_priority = None
-            for handle in data[16]:
+            for handle in data[15]:
                 tag = self.db.get_tag_from_handle(handle)
                 if tag:
                     this_priority = tag.get_priority()
@@ -225,7 +225,7 @@ class PlaceBaseModel:
         """
         Return the sorted list of tags.
         """
-        tag_list = list(map(self.get_tag_name, data[16]))
+        tag_list = list(map(self.get_tag_name, data[15]))
         # TODO for Arabic, should the next line's comma be translated?
         return ', '.join(sorted(tag_list, key=glocale.sort_key))
 

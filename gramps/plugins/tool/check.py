@@ -59,8 +59,8 @@ from gramps.gen.const import GRAMPS_LOCALE as glocale
 _ = glocale.translation.gettext
 ngettext = glocale.translation.ngettext  # else "nearby" comments are ignored
 from gramps.gen.lib import (Citation, Event, EventType, Family, Media,
-                            Name, Note, Person, Place, Repository, Source,
-                            StyledText, StyledTextTagType, Tag)
+                            Name, Note, Person, Place, PlaceName, Repository,
+                            Source, StyledText, StyledTextTagType, Tag)
 from gramps.gen.db import DbTxn, CLASS_TO_KEY_MAP
 from gramps.gen.config import config
 from gramps.gen.utils.id import create_id
@@ -193,7 +193,7 @@ class Check(tool.BatchTool):
             # then going to be deleted.
             checker.cleanup_empty_objects()
             checker.fix_encoding()
-            checker.fix_alt_place_names()
+            checker.fix_place_names()
             checker.fix_ctrlchars_in_notes()
             checker.cleanup_missing_photos(cli)
             checker.cleanup_deleted_name_formats()
@@ -454,35 +454,36 @@ class CheckIntegrity:
         if error_count == 0:
             logging.info('    OK: no ctrl characters in notes found')
 
-    def fix_alt_place_names(self):
+    def fix_place_names(self):
         """
         This scans all places and cleans up alternative names.  It removes
         Blank names, names that are duplicates of the primary name, and
         duplicates in the alt_names list.
         """
-        self.progress.set_pass(_('Looking for bad alternate place names'),
+        self.progress.set_pass(_('Looking for bad place names'),
                                self.db.get_number_of_places())
-        logging.info('Looking for bad alternate place names')
+        logging.info('Looking for bad place names')
         for handle in self.db.get_place_handles():
             place = self.db.get_place_from_handle(handle)
-            fixed_alt_names = []
+            fixed_names = []
             fixup = False
-            for name in place.get_alternative_names():
+            for name in place.get_names():
                 if not name.value or \
-                        name == place.name or \
-                        name in fixed_alt_names:
+                        name in fixed_names:
                     fixup = True
                     continue
-                fixed_alt_names.append(name)
+                fixed_names.append(name)
             if fixup:
-                place.set_alternative_names(fixed_alt_names)
+                if not fixed_names:
+                    fixed_names.append(PlaceName(value=_("Unknown")))
+                place.set_names(fixed_names)
                 self.db.commit_place(place, self.trans)
                 self.place_errors += 1
             self.progress.step()
         if self.place_errors == 0:
-            logging.info('    OK: no bad alternate places found')
+            logging.info('    OK: no bad place names found')
         else:
-            logging.info('    %d bad alternate places found and fixed',
+            logging.info('    %d bad place names found and fixed',
                          self.place_errors)
 
     def check_for_broken_family_links(self):
@@ -1545,7 +1546,7 @@ class CheckIntegrity:
                 if item[0] == 'Citation':
                     if not item[1]:
                         new_handle = create_id()
-                        person.replace_citation_references(None, new_handle)
+                        person.replace_citation_references(item[1], new_handle)
                         self.db.commit_person(person, self.trans)
                         self.invalid_citation_references.add(new_handle)
                     elif item[1] not in known_handles:
@@ -1559,7 +1560,7 @@ class CheckIntegrity:
                 if item[0] == 'Citation':
                     if not item[1]:
                         new_handle = create_id()
-                        family.replace_citation_references(None, new_handle)
+                        family.replace_citation_references(item[1], new_handle)
                         self.db.commit_family(family, self.trans)
                         self.invalid_citation_references.add(new_handle)
                     elif item[1] not in known_handles:
@@ -1573,7 +1574,7 @@ class CheckIntegrity:
                 if item[0] == 'Citation':
                     if not item[1]:
                         new_handle = create_id()
-                        place.replace_citation_references(None, new_handle)
+                        place.replace_citation_references(item[1], new_handle)
                         self.db.commit_place(place, self.trans)
                         self.invalid_citation_references.add(new_handle)
                     elif item[1] not in known_handles:
@@ -1587,7 +1588,8 @@ class CheckIntegrity:
                 if item[0] == 'Citation':
                     if not item[1]:
                         new_handle = create_id()
-                        citation.replace_citation_references(None, new_handle)
+                        citation.replace_citation_references(item[1],
+                                                             new_handle)
                         self.db.commit_citation(citation, self.trans)
                         self.invalid_citation_references.add(new_handle)
                     elif item[1] not in known_handles:
@@ -1601,7 +1603,7 @@ class CheckIntegrity:
                 if item[0] == 'Citation':
                     if not item[1]:
                         new_handle = create_id()
-                        repository.replace_citation_references(None,
+                        repository.replace_citation_references(item[1],
                                                                new_handle)
                         self.db.commit_repository(repository, self.trans)
                         self.invalid_citation_references.add(new_handle)
@@ -1616,7 +1618,7 @@ class CheckIntegrity:
                 if item[0] == 'Citation':
                     if not item[1]:
                         new_handle = create_id()
-                        obj.replace_citation_references(None, new_handle)
+                        obj.replace_citation_references(item[1], new_handle)
                         self.db.commit_media(obj, self.trans)
                         self.invalid_citation_references.add(new_handle)
                     elif item[1] not in known_handles:
@@ -1630,7 +1632,7 @@ class CheckIntegrity:
                 if item[0] == 'Citation':
                     if not item[1]:
                         new_handle = create_id()
-                        event.replace_citation_references(None, new_handle)
+                        event.replace_citation_references(item[1], new_handle)
                         self.db.commit_event(event, self.trans)
                         self.invalid_citation_references.add(new_handle)
                     elif item[1] not in known_handles:

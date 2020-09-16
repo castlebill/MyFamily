@@ -54,8 +54,8 @@ from gramps.gen.errors import HandleError
 from gramps.gen.lib import (Address, Attribute, AttributeType, ChildRef,
                             Citation, Date, Event, EventRef, EventType, Family,
                             FamilyRelType, Name, NameType, NameOriginType, Note,
-                            NoteType, Person, Place, PlaceName, Source,
-                            SrcAttribute, Surname, Tag)
+                            NoteType, Person, Place, PlaceName, PlaceType,
+                            Source, SrcAttribute, Surname, Tag)
 from gramps.gen.updatecallback import UpdateCallback
 from gramps.gen.utils.id import create_id
 
@@ -844,6 +844,7 @@ class ProgenParser(UpdateCallback):
             place = Place()
             place.set_name(PlaceName(value=place_name))
             place.set_title(place_name)
+            place.group = place.get_type().get_probable_group()
             self.__add_tag('place', place)   # add tag to 'Place'
 
             self.dbase.add_place(place, self.trans)   # add & commit ...
