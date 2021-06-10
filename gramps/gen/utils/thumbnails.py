@@ -243,7 +243,10 @@ def get_thumbnail_path(src_file, mtype=None, rectangle=None, size=SIZE_NORMAL):
     """
     filename = __build_thumb_path(src_file, rectangle, size)
     if not os.path.isfile(src_file):
-        return os.path.join(IMAGE_DIR, "image-missing.png")
+        if src_file.startswith(("http://", "https://", "ftp://")):
+            return os.path.join(IMAGE_DIR, "gramps-url.png")
+        else:
+            return os.path.join(IMAGE_DIR, "image-missing.png")
     else:
         if (not os.path.isfile(filename)) or (
                 os.path.getmtime(src_file) > os.path.getmtime(filename)):

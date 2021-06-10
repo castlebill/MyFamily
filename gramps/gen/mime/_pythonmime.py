@@ -33,6 +33,7 @@ _type_map = {
     'image/png' : 'PNG image',
     'application/pdf' : 'PDF document',
     'text/rtf' : 'Rich Text File',
+    'text/html' : 'Web page',
 }
 
 mimetypes.add_type('application/x-gramps','.grdb')

@@ -202,6 +202,8 @@ def media_path_full(db, filename):
     Given a database and a filename of a media, return the media filename
     is full form, eg 'graves/tomb.png' becomes '/home/me/genea/graves/tomb.png
     """
+    if filename.startswith(("http://", "https://", "ftp://")):
+        return filename
     if os.path.isabs(filename):
         return filename
     mpath = media_path(db)
