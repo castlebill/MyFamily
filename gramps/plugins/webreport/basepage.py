@@ -92,7 +92,7 @@ from gramps.gen.utils.thumbnails import get_thumbnail_path
 from gramps.gen.display.name import displayer as _nd
 from gramps.gen.display.place import displayer as _pd
 from gramps.plugins.lib.libhtmlconst import _CC
-from gramps.gen.utils.db import get_birth_or_fallback, get_death_or_fallback
+from gramps.gen.utils.db import get_birth_or_fallback, get_death_or_fallback, find_witnessed_people
 from gramps.gen.datehandler import parser as _dp
 from gramps.plugins.lib.libhtml import Html, xml_lang
 from gramps.plugins.lib.libhtmlbackend import HtmlBackend, process_spaces
@@ -210,6 +210,7 @@ class BasePage:
         self.create_thumbs_index = report.options["create_thumbs_index"]
         self.inc_families = report.options["inc_families"]
         self.inc_events = report.options["inc_events"]
+        self.inc_other_roles = report.options["inc_other_roles"]
         self.usecms = report.options["usecms"]
         self.prevnext = report.options["prevnext"]
         self.target_uri = report.options["cmsuri"]
@@ -933,6 +934,21 @@ class BasePage:
             notelist = attr.get_note_list()
             if notelist:
                 htmllist.extend(self.dump_notes(notelist, Event))
+
+        if self.inc_other_roles:
+            witnessed_person_handles = find_witnessed_people(self.r_db, self.person)
+            for witnessed_person_handle in witnessed_person_handles:
+                witnessed_person = self.r_db.get_person_from_handle(witnessed_person_handle)
+                for witnessed_person_event_ref in witnessed_person.get_event_ref_list():
+                    witnessed_person_event = self.r_db.get_event_from_handle(witnessed_person_event_ref.ref)
+                    if witnessed_person_event != event:
+                        continue
+                    witnessed_person_name = self.new_person_link(witnessed_person_handle, uplink, witnessed_person)
+                    htmllist.extend(Html("p",
+                                         _("(%(str1)s) %(str2)s") % {
+                                             'str1' : Html("b", witnessed_person_event_ref.get_role()),
+                                             'str2' : witnessed_person_name
+                                             }))
 
         trow2 += Html("td", htmllist, class_="ColumnNotes", colspan=3)
 
@@ -1890,6 +1906,7 @@ class BasePage:
             (self.report.surname_fname, self._("Surnames"), True),
             ("families", self._("Families"), self.report.inc_families),
             ("events", self._("Events"), self.report.inc_events),
+            ("other_roles", self._("Other roles"), self.report.inc_other_roles),
             ("places", self._("Places"), self.report.inc_places),
             ("sources", self._("Sources"), self.report.inc_sources),
             ("repositories", self._("Repositories"), inc_repos),
@@ -2070,6 +2087,7 @@ class BasePage:
 
         navs1 = [
             ("events", self._("Events"), self.report.inc_events),
+            ("other_roles", self._("Other roles"), self.report.inc_other_roles),
             ("places", self._("Places"), True),
             ("sources", self._("Sources"), True),
             ("repositories", self._("Repositories"), inc_repos),
