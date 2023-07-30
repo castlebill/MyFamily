@@ -450,28 +450,27 @@ def open_file_with_default_application(path, uistate):
     :type file_path: string
     :return: nothing
     """
-
-    norm_path = os.path.normpath(path)
-    if not os.path.exists(norm_path):
-        display_error_dialog(0, _("File %s does not exist") % norm_path,
-                             uistate)
-        return
+    if path.startswith(("http://", "https://", "ftp://")):
+        norm_path = path
+    else:
+        norm_path = os.path.normpath(path)
+        if not os.path.exists(norm_path):
+            display_error_dialog(0, _("File %s does not exist") % norm_path,
+                                 uistate)
+            return
 
     if win():
         try:
             os.startfile(norm_path)
         except WindowsError as msg:
-            display_error_dialog(0, str(msg),
-                             uistate)
-
-        return
-
-    if not norm_path.startswith('file://'):
-        norm_path = 'file://' + norm_path
-    try:
-        Gio.AppInfo.launch_default_for_uri(norm_path)
-    except GLib.Error as error:
-        display_error_dialog(0, str(error), uistate)
+            display_error_dialog(0, str(msg), uistate)
+    else:
+        if not norm_path.startswith(("http://", "https://", "ftp://", "file://")):
+            norm_path = 'file://' + norm_path
+        try:
+            Gio.AppInfo.launch_default_for_uri(norm_path)
+        except GLib.Error as error:
+            display_error_dialog(0, str(error), uistate)
 
 def process_pending_events(max_count=20):
     """

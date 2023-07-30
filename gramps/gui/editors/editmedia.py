@@ -27,6 +27,9 @@
 #
 #-------------------------------------------------------------------------
 import os
+from urllib.request import urlopen, Request
+from urllib.error import HTTPError
+
 #-------------------------------------------------------------------------
 #
 # GTK/Gnome modules
@@ -307,18 +310,43 @@ class EditMedia(EditPrimary):
             return
 
         path = self.file_path.get_text()
-        full_path = media_path_full(self.db, path)
-        if os.path.isfile(full_path):
-            self.determine_mime()
+        if path.startswith(("http://", "https://", "ftp://")):
+            request = Request(path, headers={'User-Agent': 'Mozilla/5.0'})
+            try:
+                response = urlopen(request)
+                status = response.status
+                reason = response.reason
+            except HTTPError as error:
+                status = error.code
+                reason = error.reason
+
+            if status == 200:
+                mime_type = response.getheader('Content-Type', default='')
+                offset = mime_type.find(';')
+                if offset != -1:
+                    mime_type = mime_type[:offset]
+                self.obj.set_mime_type(mime_type)
+            else:
+                msg1 = _("Invalid url!")
+                msg2 = _("The url '{url}' is not valid.\n"
+                         "Error: {error}").format(url=path, error=reason)
+                ErrorDialog(msg1, msg2, parent=self.window)
+                self.ok_button.set_sensitive(True)
+                return
         else:
-            msg1 = _("There is no media matching the current path value!")
-            msg2 = _("You have attempted to use the path with "
-                            "value '%(path)s'. This path does not exist!"
-                            " Please enter a different path") % {
-                            'path' : path }
-            ErrorDialog(msg1, msg2, parent=self.window)
-            self.ok_button.set_sensitive(True)
-            return
+
+            full_path = media_path_full(self.db, path)
+            if os.path.isfile(full_path):
+                self.determine_mime()
+            else:
+                msg1 = _("There is no media matching the current path value!")
+                msg2 = _("You have attempted to use the path with "
+                                "value '%(path)s'. This path does not exist!"
+                                " Please enter a different path") % {
+                                'path' : path }
+                ErrorDialog(msg1, msg2, parent=self.window)
+                self.ok_button.set_sensitive(True)
+                return
 
         self.obj.set_path(path)
 
