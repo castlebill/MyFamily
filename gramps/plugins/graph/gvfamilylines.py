@@ -855,7 +855,7 @@ class FamilyLinesReport(Report):
         use_html_output = False
         if self._incimages:
             use_html_output = True
-            
+
         # get birth and death symbols
         symbols = Symbols()
         death_idx = config.get("utf8.death-symbol")
