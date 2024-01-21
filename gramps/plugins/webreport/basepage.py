@@ -95,7 +95,7 @@ from gramps.plugins.lib.libhtmlconst import _CC
 from gramps.gen.utils.db import (
     get_birth_or_fallback,
     get_death_or_fallback,
-    find_witnessed_people
+    find_witnessed_people,
 )
 from gramps.gen.datehandler import parser as _dp
 from gramps.plugins.lib.libhtml import Html, xml_lang
@@ -959,10 +959,10 @@ class BasePage:
                             "p",
                             _("(%(str1)s) %(str2)s")
                             % {
-                                "str1" : Html(
+                                "str1": Html(
                                     "b", witnessed_person_event_ref.get_role()
                                 ),
-                                "str2" : witnessed_person_name,
+                                "str2": witnessed_person_name,
                             },
                         )
                     )
