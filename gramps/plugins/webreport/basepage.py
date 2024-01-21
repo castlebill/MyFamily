@@ -92,7 +92,11 @@ from gramps.gen.utils.thumbnails import get_thumbnail_path
 from gramps.gen.display.name import displayer as _nd
 from gramps.gen.display.place import displayer as _pd
 from gramps.plugins.lib.libhtmlconst import _CC
-from gramps.gen.utils.db import get_birth_or_fallback, get_death_or_fallback, find_witnessed_people
+from gramps.gen.utils.db import (
+    get_birth_or_fallback,
+    get_death_or_fallback,
+    find_witnessed_people
+)
 from gramps.gen.datehandler import parser as _dp
 from gramps.plugins.lib.libhtml import Html, xml_lang
 from gramps.plugins.lib.libhtmlbackend import HtmlBackend, process_spaces
@@ -938,17 +942,30 @@ class BasePage:
         if self.inc_other_roles:
             witnessed_person_handles = find_witnessed_people(self.r_db, self.person)
             for witnessed_person_handle in witnessed_person_handles:
-                witnessed_person = self.r_db.get_person_from_handle(witnessed_person_handle)
+                witnessed_person = self.r_db.get_person_from_handle(
+                    witnessed_person_handle
+                )
                 for witnessed_person_event_ref in witnessed_person.get_event_ref_list():
-                    witnessed_person_event = self.r_db.get_event_from_handle(witnessed_person_event_ref.ref)
+                    witnessed_person_event = self.r_db.get_event_from_handle(
+                        witnessed_person_event_ref.ref
+                    )
                     if witnessed_person_event != event:
                         continue
-                    witnessed_person_name = self.new_person_link(witnessed_person_handle, uplink, witnessed_person)
-                    htmllist.extend(Html("p",
-                                         _("(%(str1)s) %(str2)s") % {
-                                             'str1' : Html("b", witnessed_person_event_ref.get_role()),
-                                             'str2' : witnessed_person_name
-                                             }))
+                    witnessed_person_name = self.new_person_link(
+                        witnessed_person_handle, uplink, witnessed_person
+                    )
+                    htmllist.extend(
+                        Html(
+                            "p",
+                            _("(%(str1)s) %(str2)s")
+                            % {
+                                "str1" : Html(
+                                    "b", witnessed_person_event_ref.get_role()
+                                ),
+                                "str2" : witnessed_person_name,
+                            },
+                        )
+                    )
 
         trow2 += Html("td", htmllist, class_="ColumnNotes", colspan=3)
 
