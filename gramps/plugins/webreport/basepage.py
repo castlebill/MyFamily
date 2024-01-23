@@ -1923,7 +1923,6 @@ class BasePage:
             (self.report.surname_fname, self._("Surnames"), True),
             ("families", self._("Families"), self.report.inc_families),
             ("events", self._("Events"), self.report.inc_events),
-            ("other_roles", self._("Other roles"), self.report.inc_other_roles),
             ("places", self._("Places"), self.report.inc_places),
             ("sources", self._("Sources"), self.report.inc_sources),
             ("repositories", self._("Repositories"), inc_repos),
@@ -2104,7 +2103,6 @@ class BasePage:
 
         navs1 = [
             ("events", self._("Events"), self.report.inc_events),
-            ("other_roles", self._("Other roles"), self.report.inc_other_roles),
             ("places", self._("Places"), True),
             ("sources", self._("Sources"), True),
             ("repositories", self._("Repositories"), inc_repos),
