@@ -939,7 +939,8 @@ class BasePage:
             if notelist:
                 htmllist.extend(self.dump_notes(notelist, Event))
 
-        if self.inc_other_roles:
+        self_class_name = self.__class__.__name__
+        if self.inc_other_roles and self_class_name == "PersonPages":
             witnessed_person_handles = find_witnessed_people(self.r_db, self.person)
             for witnessed_person_handle in witnessed_person_handles:
                 witnessed_person = self.r_db.get_person_from_handle(
