@@ -847,7 +847,9 @@ class BasePage:
         trow += Html("/tr", close=None)
         return trow
 
-    def display_event_other_person_role(self, skip_event_ref, uplink, htmllist, refering_person):
+    def display_event_other_person_role(
+        self, skip_event_ref, uplink, htmllist, refering_person
+    ):
         """
         Display the role of the refering person to this event.
         Skip the role for the specified skip_event_ref because it is already
@@ -861,7 +863,10 @@ class BasePage:
         """
         event_refs = refering_person.get_event_ref_list()
         for event_ref in event_refs:
-            if event_ref.get_reference_handle() != skip_event_ref.get_reference_handle():
+            if (
+                event_ref.get_reference_handle()
+                != skip_event_ref.get_reference_handle()
+            ):
                 # Refering to an other event.
                 continue
             elif event_ref.is_equal(skip_event_ref):
@@ -878,9 +883,7 @@ class BasePage:
                     "p",
                     _("(%(str1)s) %(str2)s")
                     % {
-                        "str1": Html(
-                            "b", role
-                        ),
+                        "str1": Html("b", role),
                         "str2": person_name,
                     },
                 )
@@ -900,14 +903,20 @@ class BasePage:
 
         @return void
         """
-        refering_person_handles = get_event_person_referents(event.get_handle(), self.r_db)
+        refering_person_handles = get_event_person_referents(
+            event.get_handle(), self.r_db
+        )
         for refering_person_handle in refering_person_handles:
             refering_person = self.r_db.get_person_from_handle(refering_person_handle)
             if not refering_person:
                 continue
-            self.display_event_other_person_role(skip_event_ref, uplink, htmllist, refering_person)
+            self.display_event_other_person_role(
+                skip_event_ref, uplink, htmllist, refering_person
+            )
 
-    def display_event_other_family_role(self, skip_event_ref, uplink, htmllist, refering_family):
+    def display_event_other_family_role(
+        self, skip_event_ref, uplink, htmllist, refering_family
+    ):
         """
         Display the role of the refering family to this event.
         Skip the role for the specified skip_event_ref because it is already
@@ -921,7 +930,10 @@ class BasePage:
         """
         event_refs = refering_family.get_event_ref_list()
         for event_ref in event_refs:
-            if event_ref.get_reference_handle() != skip_event_ref.get_reference_handle():
+            if (
+                event_ref.get_reference_handle()
+                != skip_event_ref.get_reference_handle()
+            ):
                 # Refering to an other event.
                 continue
             elif event_ref.is_equal(skip_event_ref):
@@ -941,9 +953,7 @@ class BasePage:
                     "p",
                     _("(%(str1)s) %(str2)s")
                     % {
-                        "str1": Html(
-                            "b", role
-                        ),
+                        "str1": Html("b", role),
                         "str2": family_name,
                     },
                 )
@@ -963,12 +973,16 @@ class BasePage:
 
         @return void
         """
-        refering_family_handles = get_event_family_referents(event.get_handle(), self.r_db)
+        refering_family_handles = get_event_family_referents(
+            event.get_handle(), self.r_db
+        )
         for refering_family_handle in refering_family_handles:
             refering_family = self.r_db.get_family_from_handle(refering_family_handle)
             if not refering_family:
                 continue
-            self.display_event_other_family_role(skip_event_ref, uplink, htmllist, refering_family)
+            self.display_event_other_family_role(
+                skip_event_ref, uplink, htmllist, refering_family
+            )
 
     def display_event_row(
         self, event, event_ref, place_lat_long, uplink, hyperlink, omit
