@@ -96,6 +96,7 @@ from gramps.gen.utils.db import (
     get_birth_or_fallback,
     get_death_or_fallback,
     get_event_person_referents,
+    get_event_family_referents,
 )
 from gramps.gen.datehandler import parser as _dp
 from gramps.plugins.lib.libhtml import Html, xml_lang
@@ -906,6 +907,69 @@ class BasePage:
                 continue
             self.display_event_other_person_role(skip_event_ref, uplink, htmllist, refering_person)
 
+    def display_event_other_family_role(self, skip_event_ref, uplink, htmllist, refering_family):
+        """
+        Display the role of the refering family to this event.
+        Skip the role for the specified skip_event_ref because it is already
+        displayed with the primary role.
+
+        @param self            This report page.
+        @param skip_event_ref  This event_ref can be skipped. It is already displayed.
+        @param uplink          If True, then "../../../" is inserted in front of the result.
+        @param htmllist        The HTML list to which text has to be appended.
+        @param refering_family The family that has a role in the event.
+        """
+        event_refs = refering_family.get_event_ref_list()
+        for event_ref in event_refs:
+            if event_ref.get_reference_handle() != skip_event_ref.get_reference_handle():
+                # Refering to an other event.
+                continue
+            elif event_ref.is_equal(skip_event_ref):
+                # This event_ref is already displayed.
+                continue
+            role = event_ref.get_role()
+            plain_family_name = self.report.get_family_name(refering_family)
+            family_name = self.family_link(
+                refering_family.get_handle(),
+                plain_family_name,
+                gid=refering_family.get_gramps_id(),
+                uplink=uplink,
+            )
+            # Add the family name and role to the page.
+            htmllist.extend(
+                Html(
+                    "p",
+                    _("(%(str1)s) %(str2)s")
+                    % {
+                        "str1": Html(
+                            "b", role
+                        ),
+                        "str2": family_name,
+                    },
+                )
+            )
+
+    def display_event_other_family_roles(self, event, skip_event_ref, uplink, htmllist):
+        """
+        Display all the other families with their role to this event.
+        Skip the family with the specified skip_event_ref, because it is already
+        displayed with the primary role.
+
+        @param self           This report page.
+        @param event          The event that is concerned.
+        @param skip_event_ref This event_ref can be skipped. It is already displayed.
+        @param uplink         If True, then "../../../" is inserted in front of the result.
+        @param htmllist       The HTML list to which text has to be appended.
+
+        @return void
+        """
+        refering_family_handles = get_event_family_referents(event.get_handle(), self.r_db)
+        for refering_family_handle in refering_family_handles:
+            refering_family = self.r_db.get_family_from_handle(refering_family_handle)
+            if not refering_family:
+                continue
+            self.display_event_other_family_role(skip_event_ref, uplink, htmllist, refering_family)
+
     def display_event_row(
         self, event, event_ref, place_lat_long, uplink, hyperlink, omit
     ):
@@ -1001,6 +1065,7 @@ class BasePage:
 
         if self.inc_other_roles:
             self.display_event_other_person_roles(event, event_ref, uplink, htmllist)
+            self.display_event_other_family_roles(event, event_ref, uplink, htmllist)
 
         trow2 += Html("td", htmllist, class_="ColumnNotes", colspan=3)
 
