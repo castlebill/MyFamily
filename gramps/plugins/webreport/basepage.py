@@ -95,7 +95,7 @@ from gramps.plugins.lib.libhtmlconst import _CC
 from gramps.gen.utils.db import (
     get_birth_or_fallback,
     get_death_or_fallback,
-    find_witnessed_people,
+    get_event_person_referents,
 )
 from gramps.gen.datehandler import parser as _dp
 from gramps.plugins.lib.libhtml import Html, xml_lang
@@ -846,6 +846,66 @@ class BasePage:
         trow += Html("/tr", close=None)
         return trow
 
+    def display_event_other_person_role(self, skip_event_ref, uplink, htmllist, refering_person):
+        """
+        Display the role of the refering person to this event.
+        Skip the role for the specified skip_event_ref because it is already
+        displayed with the primary role.
+
+        @param self            This report page.
+        @param skip_event_ref  This event_ref can be skipped. It is already displayed.
+        @param uplink          If True, then "../../../" is inserted in front of the result.
+        @param htmllist        The HTML list to which text has to be appended.
+        @param refering_person The person that has a role in the event.
+        """
+        event_refs = refering_person.get_event_ref_list()
+        for event_ref in event_refs:
+            if event_ref.get_reference_handle() != skip_event_ref.get_reference_handle():
+                # Refering to an other event.
+                continue
+            elif event_ref.is_equal(skip_event_ref):
+                # This event_ref is already displayed.
+                continue
+            role = event_ref.get_role()
+            # Get the person name with a link to it.
+            person_name = self.new_person_link(
+                refering_person.get_handle(), uplink, refering_person
+            )
+            # Add the person name and role to the page.
+            htmllist.extend(
+                Html(
+                    "p",
+                    _("(%(str1)s) %(str2)s")
+                    % {
+                        "str1": Html(
+                            "b", role
+                        ),
+                        "str2": person_name,
+                    },
+                )
+            )
+
+    def display_event_other_person_roles(self, event, skip_event_ref, uplink, htmllist):
+        """
+        Display all the other persons with their role to this event.
+        Skip the person with the specified skip_event_ref, because he is already
+        displayed with the primary role.
+
+        @param self           This report page.
+        @param event          The event that is concerned.
+        @param skip_event_ref This event_ref can be skipped. It is already displayed.
+        @param uplink         If True, then "../../../" is inserted in front of the result.
+        @param htmllist       The HTML list to which text has to be appended.
+
+        @return void
+        """
+        refering_person_handles = get_event_person_referents(event.get_handle(), self.r_db)
+        for refering_person_handle in refering_person_handles:
+            refering_person = self.r_db.get_person_from_handle(refering_person_handle)
+            if not refering_person:
+                continue
+            self.display_event_other_person_role(skip_event_ref, uplink, htmllist, refering_person)
+
     def display_event_row(
         self, event, event_ref, place_lat_long, uplink, hyperlink, omit
     ):
@@ -939,34 +999,8 @@ class BasePage:
             if notelist:
                 htmllist.extend(self.dump_notes(notelist, Event))
 
-        self_class_name = self.__class__.__name__
-        if self.inc_other_roles and self_class_name == "PersonPages":
-            witnessed_person_handles = find_witnessed_people(self.r_db, self.person)
-            for witnessed_person_handle in witnessed_person_handles:
-                witnessed_person = self.r_db.get_person_from_handle(
-                    witnessed_person_handle
-                )
-                for witnessed_person_event_ref in witnessed_person.get_event_ref_list():
-                    witnessed_person_event = self.r_db.get_event_from_handle(
-                        witnessed_person_event_ref.ref
-                    )
-                    if witnessed_person_event != event:
-                        continue
-                    witnessed_person_name = self.new_person_link(
-                        witnessed_person_handle, uplink, witnessed_person
-                    )
-                    htmllist.extend(
-                        Html(
-                            "p",
-                            _("(%(str1)s) %(str2)s")
-                            % {
-                                "str1": Html(
-                                    "b", witnessed_person_event_ref.get_role()
-                                ),
-                                "str2": witnessed_person_name,
-                            },
-                        )
-                    )
+        if self.inc_other_roles:
+            self.display_event_other_person_roles(event, event_ref, uplink, htmllist)
 
         trow2 += Html("td", htmllist, class_="ColumnNotes", colspan=3)
 
