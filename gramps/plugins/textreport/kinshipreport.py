@@ -58,7 +58,6 @@ from gramps.gen.utils.db import get_birth_or_fallback, get_death_or_fallback
 from gramps.gen.proxy import CacheProxyDb
 from gramps.gen.display.name import displayer as _nd
 
-
 # ------------------------------------------------------------------------
 #
 # KinshipReport
@@ -319,7 +318,7 @@ class KinshipReport(Report):
 
         name = self._name_display.display(person)
         if self.inc_ids:
-            name = person.get_gramps_id()+": "+name
+            name = person.get_gramps_id() + ": " + name
         mark = utils.get_person_mark(self.database, person)
         birth_date = ""
         birth = get_birth_or_fallback(self.database, person)
