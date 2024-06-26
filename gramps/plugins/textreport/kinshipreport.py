@@ -58,6 +58,7 @@ from gramps.gen.utils.db import get_birth_or_fallback, get_death_or_fallback
 from gramps.gen.proxy import CacheProxyDb
 from gramps.gen.display.name import displayer as _nd
 
+
 # ------------------------------------------------------------------------
 #
 # KinshipReport
@@ -384,7 +385,7 @@ class KinshipOptions(MenuReportOptions):
         incids = BooleanOption(_("Show Gramps ID"), False)
         incids.set_help(_("Whether to show Gramps ID"))
         menu.add_option(category_name, "incids", incids)
-        
+
         incspouses = BooleanOption(_("Include spouses"), True)
         incspouses.set_help(_("Whether to include spouses"))
         menu.add_option(category_name, "incspouses", incspouses)
