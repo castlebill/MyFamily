@@ -53,6 +53,7 @@ TEST_DIR = os.path.abspath(os.path.join(DATA_DIR, "tests"))
 #  Local Functions
 # ------------------------------------------------------------------
 
+
 def mock_time(*args):
     """
     Mock up a dummy to replace the varying 'time string results'
@@ -65,6 +66,7 @@ def mock_localtime(*args):
     Mock up a dummy to replace the varying 'time string results'
     """
     return strptime("25 Dec 1999", "%d %b %Y")
+
 
 # These tests assume a US date and time format.
 # If the locale is not available on the
@@ -79,6 +81,7 @@ except locale.Error:  # seems to fail on Windows system for some reason
         en_US_locale_available = True
     except locale.Error:
         pass
+
 
 @unittest.skipUnless(en_US_locale_available, "en_US locale is not avaiable")
 class TestImports(unittest.TestCase):
