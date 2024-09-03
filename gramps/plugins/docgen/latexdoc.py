@@ -36,11 +36,9 @@
 #
 # ------------------------------------------------------------------------
 from bisect import bisect
-import itertools
 import re
 import os
 import logging
-import string
 
 try:
     from PIL import Image
@@ -498,7 +496,6 @@ MULTCOL_COUNT_BASE = "aaa"
 def str_incr(str_counter):
     """for counting table rows"""
     lili = list(str_counter)
-    cycle = itertools.cycle(string.ascii_lowercase)
     while 1:
         yield "".join(lili)
         if "".join(lili) == len(lili) * "z":
@@ -512,12 +509,12 @@ def str_incr(str_counter):
                     )
                 )
             )
-        for i in reversed(range(len(lili))):
-            lili[i] = next(cycle)
-            if lili[i] != "a":
+        for i in reversed(lili):
+            if lili[i] < "z":
+                lili[i] = chr(ord(lili[i]) + 1)
                 break
             else:
-                cycle = itertools.cycle(string.ascii_lowercase)
+                lili[i] = "a"
 
 
 # ------------------------------------------------------------------------
