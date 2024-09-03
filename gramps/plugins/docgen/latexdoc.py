@@ -36,9 +36,11 @@
 #
 # ------------------------------------------------------------------------
 from bisect import bisect
+import itertools
 import re
 import os
 import logging
+import string
 
 try:
     from PIL import Image
@@ -112,6 +114,7 @@ _LATEX_TEMPLATE = """%
 \\usepackage{ifthen}% For table width calculations
 \\usepackage{ragged2e}% For left aligning with hyphenation
 \\usepackage{wrapfig}% wrap pictures in text
+\\usepackage[normalem]{ulem}% For strikeout
 %
 % Depending on your LaTeX installation, the margins may be too
 % narrow.  This can be corrected by uncommenting the following
@@ -495,6 +498,7 @@ MULTCOL_COUNT_BASE = "aaa"
 def str_incr(str_counter):
     """for counting table rows"""
     lili = list(str_counter)
+    cycle = itertools.cycle(string.ascii_lowercase)
     while 1:
         yield "".join(lili)
         if "".join(lili) == len(lili) * "z":
@@ -508,12 +512,12 @@ def str_incr(str_counter):
                     )
                 )
             )
-        for i in reversed(lili):
-            if lili[i] < "z":
-                lili[i] = chr(ord(lili[i]) + 1)
+        for i in reversed(range(len(lili))):
+            lili[i] = next(cycle)
+            if lili[i] != "a":
                 break
             else:
-                lili[i] = "a"
+                cycle = itertools.cycle(string.ascii_lowercase)
 
 
 # ------------------------------------------------------------------------
@@ -601,6 +605,8 @@ class LaTeXBackend(DocBackend):
         DocBackend.FONTSIZE,
         DocBackend.FONTFACE,
         DocBackend.SUPERSCRIPT,
+        DocBackend.SUBSCRIPT,
+        DocBackend.STRIKETHROUGH,
     ]
 
     STYLETAG_MARKUP = {
@@ -608,6 +614,8 @@ class LaTeXBackend(DocBackend):
         DocBackend.ITALIC: ("\\textit{", "}"),
         DocBackend.UNDERLINE: ("\\underline{", "}"),
         DocBackend.SUPERSCRIPT: ("\\textsuperscript{", "}"),
+        DocBackend.SUBSCRIPT: ("\\textsubscript{", "}"),
+        DocBackend.STRIKETHROUGH: ("\\sout{", "}"),
     }
 
     ESCAPE_FUNC = lambda x: latexescape
