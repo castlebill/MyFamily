@@ -44,6 +44,7 @@ _YIELD_INTERVAL = 350
 
 NUM_SURNAMES = _("Number of Surnames to display")
 
+
 # ------------------------------------------------------------------------
 #
 # TopSurnamesGramplet class
