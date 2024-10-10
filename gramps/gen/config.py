@@ -426,9 +426,7 @@ if not os.path.exists(CONFIGMAN.filename):
             if os.path.exists(previous_grampsini):
                 logging.info("Importing old config file '%s'...", previous_grampsini)
                 CONFIGMAN.load(previous_grampsini)
-                logging.info(
-                    "Done importing old config file '%s'", previous_grampsini
-                )
+                logging.info("Done importing old config file '%s'", previous_grampsini)
                 break
 
 # ---------------------------------------------------------------
