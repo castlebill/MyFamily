@@ -351,7 +351,7 @@ class GenericFilter:
         if user:
             user.begin_progress(_("Filter"), _("Preparing ..."), len(self.flist) + 1)
             # Give the progress popup some time to be visible:
-            time.sleep(.1)
+            time.sleep(0.1)
 
         for rule in self.flist:
             if user:
