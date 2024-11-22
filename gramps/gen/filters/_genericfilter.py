@@ -25,6 +25,7 @@ Package providing filtering framework for Gramps.
 """
 
 import logging
+import time
 
 # ------------------------------------------------------------------------
 #
@@ -156,11 +157,13 @@ class GenericFilter:
         rules = []
         for item in filter.flist:
             if hasattr(item, "find_filter"):
-                self.walk_filters(
-                    item.find_filter(),
-                    current_invert,
-                    result,
-                )
+                rule_filter = item.find_filter()
+                if rule_filter is not None:
+                    self.walk_filters(
+                        rule_filter,
+                        current_invert,
+                        result,
+                    )
             elif hasattr(item, "map"):
                 rules.append(item.map)
         if rules:
@@ -346,12 +349,14 @@ class GenericFilter:
                 match the filter are returned as a list of handles
         """
         if user:
-            user.begin_progress(_("Filter"), _("Preparing ..."), len(self.flist))
+            user.begin_progress(_("Filter"), _("Preparing ..."), len(self.flist) + 1)
+            # Give the progress popup some time to be visible:
+            time.sleep(.1)
 
         for rule in self.flist:
-            rule.requestprepare(db, user)
             if user:
                 user.step_progress()
+            rule.requestprepare(db, user)
 
         if user:
             user.end_progress()
