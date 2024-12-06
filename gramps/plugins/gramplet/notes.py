@@ -68,13 +68,13 @@ class Notes(Gramplet):
         self.right = SimpleButton("go-next", self.right_clicked)
         self.right.set_sensitive(False)
         hbox.pack_start(self.right, False, False, 0)
-        self.remove = SimpleButton('list-remove', self.remove_clicked)
+        self.remove = SimpleButton("list-remove", self.remove_clicked)
         self.remove.set_sensitive(False)
         hbox.pack_start(self.remove, False, False, 0)
-        self.edit = SimpleButton('gtk-edit', self.edit_clicked)
+        self.edit = SimpleButton("gtk-edit", self.edit_clicked)
         self.edit.set_sensitive(False)
         hbox.pack_start(self.edit, False, False, 0)
-        self.add = SimpleButton('list-add', self.add_clicked)
+        self.add = SimpleButton("list-add", self.add_clicked)
         self.add.set_sensitive(False)
         hbox.pack_start(self.add, False, False, 0)
         self.page = Gtk.Label()
@@ -166,8 +166,12 @@ class NotesOf(Notes):
         self.object_class = object_class
 
     def db_changed(self):
-        self.connect(self.dbstate.db, "%s-update" % self.object_class.lower(), self.update)
-        self.connect(self.dbstate.db, "%s-delete" % self.object_class.lower(), self.update)
+        self.connect(
+            self.dbstate.db, "%s-update" % self.object_class.lower(), self.update
+        )
+        self.connect(
+            self.dbstate.db, "%s-delete" % self.object_class.lower(), self.update
+        )
         self.connect(self.dbstate.db, "note-add", self.update)
         self.connect(self.dbstate.db, "note-update", self.update)
         self.connect(self.dbstate.db, "note-delete", self.update)
@@ -201,7 +205,9 @@ class NotesOf(Notes):
     def update_has_data(self):
         active_handle = self.get_active(self.object_class)
         if active_handle:
-            active = self.dbstate.db.method("get_%s_from_handle", self.object_class)(active_handle)
+            active = self.dbstate.db.method("get_%s_from_handle", self.object_class)(
+                active_handle
+            )
             self.set_has_data(self.get_has_data(active))
         else:
             self.set_has_data(False)
@@ -211,8 +217,10 @@ class NotesOf(Notes):
         Remove the current note from the currently active object.
         """
         object_handle = self.get_active(self.object_class)
-        object = self.dbstate.db.method("get_%s_from_handle", self.object_class)(object_handle)
-        with DbTxn('Delete Note', self.dbstate.db) as trans:
+        object = self.dbstate.db.method("get_%s_from_handle", self.object_class)(
+            object_handle
+        )
+        with DbTxn("Delete Note", self.dbstate.db) as trans:
             object.remove_note(self.note_list[self.current])
             self.dbstate.db.method("commit_%s", self.object_class)(object, trans)
         self.update()
@@ -242,15 +250,22 @@ class NotesOf(Notes):
             # cache the handle of the currently active object and use
             #  a lambda to pass into add_note
             object_handle = self.get_active(self.object_class)
-            EditNote(self.dbstate, self.uistate, self.track,
-                note, lambda handle: self.add_note(object_handle, handle))
+            EditNote(
+                self.dbstate,
+                self.uistate,
+                self.track,
+                note,
+                lambda handle: self.add_note(object_handle, handle),
+            )
         except WindowActiveError:
             pass
 
     def add_note(self, object_handle, note_handle):
         if object_handle:
-            object = self.dbstate.db.method("get_%s_from_handle", self.object_class)(object_handle)
-            with DbTxn('Attach Note', self.dbstate.db) as trans:
+            object = self.dbstate.db.method("get_%s_from_handle", self.object_class)(
+                object_handle
+            )
+            with DbTxn("Attach Note", self.dbstate.db) as trans:
                 object.add_note(note_handle)
                 self.dbstate.db.method("commit_%s", self.object_class)(object, trans)
             self.update()
@@ -259,7 +274,9 @@ class NotesOf(Notes):
         self.clear_text()
         active_handle = self.get_active(self.object_class)
         if active_handle:
-            active = self.dbstate.db.method("get_%s_from_handle", self.object_class)(active_handle)
+            active = self.dbstate.db.method("get_%s_from_handle", self.object_class)(
+                active_handle
+            )
             if active:
                 self.get_notes(active)
             else:
@@ -321,6 +338,7 @@ class SourceNotes(NotesOf):
 
     def init(self):
         super().init("Source")
+
 
 class CitationNotes(NotesOf):
     """
