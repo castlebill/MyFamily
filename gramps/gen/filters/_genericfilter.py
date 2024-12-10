@@ -273,6 +273,7 @@ class GenericFilter:
 
         else:
             if user:
+                id_list = list(id_list)
                 user.begin_progress(_("Filter"), _("Applying ..."), len(id_list))
             for data in id_list:
                 if user:
